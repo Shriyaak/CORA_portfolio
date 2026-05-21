@@ -1,0 +1,520 @@
+'use client';
+
+import { useState, useEffect, useRef } from 'react';
+
+const BG = '#e0e0e0';
+const SHADOW_OUT = '6px 6px 14px #bebebe, -6px -6px 14px #ffffff';
+const SHADOW_INSET = 'inset 4px 4px 10px #bebebe, inset -4px -4px 10px #ffffff';
+
+const GLASS_BG      = 'rgba(20, 20, 22, 0.72)';
+const GLASS_BORDER  = '1px solid rgba(255,255,255,0.12)';
+const GLASS_SHEEN   = `linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.04) 40%, rgba(255,255,255,0.0) 100%)`;
+const GLASS_SHADOW  = '0 8px 32px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.3)';
+const GLASS_INSET   = 'inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.3)';
+const BLUR          = 'blur(18px) saturate(1.4)';
+const TEXT_PRIMARY   = 'rgba(255,255,255,0.92)';
+const TEXT_SECONDARY = 'rgba(255,255,255,0.45)';
+const TEXT_DIM       = 'rgba(255,255,255,0.28)';
+
+const glassCard = (extra = {}) => ({
+  background: GLASS_BG,
+  backdropFilter: BLUR,
+  WebkitBackdropFilter: BLUR,
+  border: GLASS_BORDER,
+  boxShadow: GLASS_SHADOW,
+  borderRadius: '20px',
+  position: 'relative',
+  overflow: 'hidden',
+  ...extra,
+});
+
+function Sheen() {
+  return (
+    <div style={{
+      position: 'absolute', inset: 0,
+      background: GLASS_SHEEN,
+      borderRadius: '20px',
+      pointerEvents: 'none', zIndex: 0,
+    }} />
+  );
+}
+
+const BAR_COUNT = 28;
+
+function FrequencyBars({ state }) {
+  const barsRef = useRef([]);
+  const animRef = useRef(null);
+
+  useEffect(() => {
+    const animate = (t) => {
+      barsRef.current.forEach((bar, i) => {
+        if (!bar) return;
+        let height;
+        if (state === 'idle') {
+          height = 4 + Math.sin(t / 800 + i * 0.7) * 4 + Math.sin(t / 1200 + i * 0.4) * 3;
+        } else if (state === 'thinking') {
+          height = 8 + Math.sin(t / 150 + i * 0.9) * 18 + Math.sin(t / 90 + i * 1.3) * 12;
+        } else if (state === 'responding') {
+          height = 6 + Math.sin(t / 300 + i * 0.8) * 12 + Math.sin(t / 500 + i * 0.5) * 8;
+        } else if (state === 'listening') {
+          height = 6 + Math.sin(t / 100 + i * 1.1) * 20 + Math.sin(t / 60 + i * 0.8) * 14;
+        }
+        bar.style.height = `${Math.max(3, height)}px`;
+      });
+      animRef.current = requestAnimationFrame(animate);
+    };
+    animRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animRef.current);
+  }, [state]);
+
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '4px',
+      height: '60px',
+      width: '280px',
+      padding: '10px 20px',
+    }}>
+      {Array.from({ length: BAR_COUNT }).map((_, i) => (
+        <div
+          key={i}
+          ref={el => barsRef.current[i] = el}
+          style={{
+            width: '3px',
+            height: '4px',
+            borderRadius: '2px',
+            background: state === 'listening'
+              ? 'rgba(100,160,255,0.75)'
+              : 'rgba(60,60,60,0.75)',
+            transition: 'background 0.3s ease',
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function MessageBubble({ msg }) {
+  const parts = msg.text.split(/(https?:\/\/[^\s]+)/g);
+  return (
+    <div style={{
+      display: 'flex',
+      justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
+    }}>
+      <div style={{
+        maxWidth: '85%',
+        background: msg.role === 'user'
+          ? 'rgba(255,255,255,0.07)'
+          : 'rgba(255,255,255,0.11)',
+        border: `1px solid rgba(255,255,255,${msg.role === 'cora' ? '0.14' : '0.06'})`,
+        borderRadius: msg.role === 'user'
+          ? '14px 14px 4px 14px'
+          : '14px 14px 14px 4px',
+        padding: '9px 13px',
+        fontFamily: 'Rajdhani, sans-serif',
+        fontSize: '15px',
+        color: msg.role === 'user' ? TEXT_SECONDARY : TEXT_PRIMARY,
+        lineHeight: 1.55,
+        boxShadow: msg.role === 'cora' ? GLASS_INSET : 'none',
+        wordBreak: 'break-word',
+        overflowWrap: 'break-word',
+      }}>
+        {parts.map((part, j) =>
+          /^https?:\/\//.test(part) ? (
+            <a
+              key={j}
+              href={part}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: 'rgba(100,180,255,0.9)',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+                wordBreak: 'break-all',
+              }}
+            >{part}</a>
+          ) : part
+        )}
+      </div>
+    </div>
+  );
+}
+
+const INITIAL_MESSAGES = [
+  { role: 'cora', text: "Hi! I'm CORA. Ask me anything about Shreeya ✨" },
+];
+
+export default function TalkButton() {
+  const [open, setOpen]           = useState(false);
+  const [messages, setMessages]   = useState(INITIAL_MESSAGES);
+  const [input, setInput]         = useState('');
+  const [loading, setLoading]     = useState(false);
+  const [barState, setBarState]   = useState('idle');
+  const [listening, setListening] = useState(false);
+  const [micSupported, setMicSupported] = useState(false);
+  const bottomRef      = useRef(null);
+  const inputRef       = useRef(null);
+  const recognitionRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' &&
+      ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+      setMicSupported(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const sendText = async (text) => {
+    const trimmed = (text || input).trim();
+    if (!trimmed || loading) return;
+    setInput('');
+    setOpen(true);
+    setMessages(m => [...m, { role: 'user', text: trimmed }]);
+    setLoading(true);
+    setBarState('thinking');
+
+    try {
+      const history = messages.map(m => ({
+        role: m.role === 'user' ? 'user' : 'assistant',
+        content: m.text,
+      }));
+
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: trimmed, history }),
+      });
+
+      const data = await res.json();
+      setBarState('responding');
+      setMessages(m => [...m, { role: 'cora', text: data.reply }]);
+      setTimeout(() => setBarState('idle'), 2000);
+    } catch {
+      setMessages(m => [...m, { role: 'cora', text: 'Something went wrong. Please try again.' }]);
+      setBarState('idle');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const send = () => sendText(input);
+
+  const startListening = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
+
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    recognition.continuous = false;
+
+    recognition.onstart = () => {
+      setListening(true);
+      setBarState('listening');
+      setInput('');
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setListening(false);
+      setBarState('idle');
+      setInput(transcript);
+      setTimeout(() => sendText(transcript), 100);
+    };
+
+    recognition.onerror = () => {
+      setListening(false);
+      setBarState('idle');
+    };
+
+    recognition.onend = () => {
+      setListening(false);
+      if (barState === 'listening') setBarState('idle');
+    };
+
+    recognition.start();
+  };
+
+  const stopListening = () => {
+    if (recognitionRef.current) recognitionRef.current.stop();
+    setListening(false);
+    setBarState('idle');
+  };
+
+  return (
+    <>
+      {/* ── INPUT BAR + FREQUENCY BARS ── */}
+      <div style={{
+        position: 'absolute',
+        top: '23%',
+        left: '53%',
+        transform: 'translateX(-50%)',
+        zIndex: 20,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '4px',
+      }}>
+
+        {/* Input bar */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          background: BG,
+          boxShadow: SHADOW_OUT,
+          borderRadius: '999px',
+          padding: '14px 24px',
+          width: '420px',
+          border: 'none',
+          transition: 'box-shadow 0.2s ease',
+        }}>
+          <input
+            ref={inputRef}
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && send()}
+            placeholder={listening ? 'Listening...' : 'Ask about Shreeya...'}
+            style={{
+              flex: 1,
+              background: 'transparent',
+              border: 'none',
+              outline: 'none',
+              fontSize: '17px',
+              fontFamily: 'Rajdhani, sans-serif',
+              fontWeight: '700',
+              color: listening ? 'rgba(100,160,255,0.9)' : 'rgba(0,0,0,0.85)',
+              letterSpacing: '0.02em',
+              transition: 'color 0.2s ease',
+            }}
+          />
+
+          {/* Send button */}
+          <button
+            onClick={send}
+            style={{
+              background: BG,
+              boxShadow: SHADOW_INSET,
+              border: 'none',
+              borderRadius: '50%',
+              width: '32px',
+              height: '32px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              color: 'rgba(0,0,0,0.5)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'box-shadow 0.15s, color 0.15s',
+              flexShrink: 0,
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.boxShadow = SHADOW_OUT;
+              e.currentTarget.style.color = 'rgba(0,0,0,0.85)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.boxShadow = SHADOW_INSET;
+              e.currentTarget.style.color = 'rgba(0,0,0,0.5)';
+            }}
+          >→</button>
+
+          {/* Mic button */}
+          {micSupported && (
+            <button
+              onClick={listening ? stopListening : startListening}
+              title={listening ? 'Stop listening' : 'Speak your question'}
+              style={{
+                background: listening ? 'rgba(100,160,255,0.15)' : BG,
+                boxShadow: listening ? SHADOW_INSET : SHADOW_OUT,
+                border: 'none',
+                borderRadius: '50%',
+                width: '32px',
+                height: '32px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+                transition: 'box-shadow 0.15s ease, background 0.2s ease',
+                position: 'relative',
+              }}
+            >
+              {listening && (
+                <div style={{
+                  position: 'absolute',
+                  inset: '-5px',
+                  borderRadius: '50%',
+                  border: '2px solid rgba(100,160,255,0.5)',
+                  animation: 'micPulse 1s ease-in-out infinite',
+                  pointerEvents: 'none',
+                }} />
+              )}
+              <svg
+                width="14" height="14" viewBox="0 0 24 24"
+                fill="none"
+                stroke={listening ? 'rgba(100,160,255,1)' : 'rgba(0,0,0,0.5)'}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ transition: 'stroke 0.2s ease' }}
+              >
+                <rect x="9" y="2" width="6" height="12" rx="3"/>
+                <path d="M5 10a7 7 0 0 0 14 0"/>
+                <line x1="12" y1="19" x2="12" y2="22"/>
+                <line x1="8" y1="22" x2="16" y2="22"/>
+              </svg>
+            </button>
+          )}
+        </div>
+
+        {/* Frequency bars */}
+        <FrequencyBars state={barState} />
+      </div>
+
+      {/* ── CHAT PANEL ── */}
+      {open && (
+        <div style={{
+          position: 'fixed',
+          top: '80%',
+          right: '32px',
+          transform: 'translateY(-70%)',
+          zIndex: 30,
+          animation: 'slideIn 0.35s cubic-bezier(0.22,1,0.36,1)',
+        }}>
+          <div style={{ ...glassCard({ padding: '20px', width: '320px' }) }}>
+            <Sheen />
+            <div style={{ position: 'relative', zIndex: 1 }}>
+
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '14px',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{
+                    width: '7px', height: '7px', borderRadius: '50%',
+                    background: loading
+                      ? 'rgba(255,200,100,0.9)'
+                      : listening
+                      ? 'rgba(100,160,255,0.9)'
+                      : 'rgba(180,220,180,0.8)',
+                    boxShadow: loading
+                      ? '0 0 6px rgba(255,200,100,0.6)'
+                      : listening
+                      ? '0 0 6px rgba(100,160,255,0.6)'
+                      : '0 0 6px rgba(150,220,150,0.6)',
+                    transition: 'all 0.3s',
+                  }} />
+                  <span style={{
+                    fontFamily: 'Orbitron, monospace',
+                    fontSize: '8px', letterSpacing: '0.3em',
+                    color: TEXT_SECONDARY, textTransform: 'uppercase',
+                  }}>
+                    {loading ? 'CORA is thinking...' : listening ? 'Listening...' : 'Chat with CORA'}
+                  </span>
+                </div>
+                <button onClick={() => setOpen(false)} style={{
+                  background: 'none', border: 'none',
+                  cursor: 'pointer', color: TEXT_DIM,
+                  fontSize: '18px', lineHeight: 1,
+                }}>×</button>
+              </div>
+
+              <div style={{
+                background: 'rgba(0,0,0,0.25)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                borderRadius: '14px',
+                padding: '12px',
+                height: '430px',
+                overflowY: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                marginBottom: '12px',
+                scrollbarWidth: 'none',
+              }}>
+                {messages.map((msg, i) => (
+                  <MessageBubble key={i} msg={msg} />
+                ))}
+                {loading && (
+                  <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                    <div style={{
+                      background: 'rgba(255,255,255,0.08)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: '14px 14px 14px 4px',
+                      padding: '10px 16px',
+                      display: 'flex', gap: '5px', alignItems: 'center',
+                    }}>
+                      {[0,1,2].map(d => (
+                        <div key={d} style={{
+                          width: '6px', height: '6px', borderRadius: '50%',
+                          background: 'rgba(255,255,255,0.4)',
+                          animation: 'dotPulse 1.2s ease-in-out infinite',
+                          animationDelay: `${d * 0.2}s`,
+                        }} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div ref={bottomRef} />
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <input
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && send()}
+                  placeholder="Ask CORA..."
+                  style={{
+                    flex: 1,
+                    background: 'rgba(0,0,0,0.3)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '12px',
+                    padding: '11px 14px',
+                    fontSize: '15px',
+                    fontFamily: 'Rajdhani, sans-serif',
+                    outline: 'none',
+                    color: TEXT_PRIMARY,
+                  }}
+                />
+                <button onClick={send} style={{
+                  width: '42px', height: '42px', flexShrink: 0,
+                  background: 'rgba(255,255,255,0.08)',
+                  border: '1px solid rgba(255,255,255,0.14)',
+                  borderRadius: '12px',
+                  fontSize: '16px', cursor: 'pointer',
+                  color: TEXT_PRIMARY,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: GLASS_INSET,
+                }}>→</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes slideIn {
+          from { opacity: 0; transform: translateY(-50%) translateX(20px); }
+          to   { opacity: 1; transform: translateY(-50%) translateX(0); }
+        }
+        @keyframes dotPulse {
+          0%, 100% { opacity: 0.25; transform: scale(0.8); }
+          50%       { opacity: 1;   transform: scale(1.1); }
+        }
+        @keyframes micPulse {
+          0%, 100% { transform: scale(1); opacity: 0.5; }
+          50%       { transform: scale(1.35); opacity: 1; }
+        }
+      `}</style>
+    </>
+  );
+}

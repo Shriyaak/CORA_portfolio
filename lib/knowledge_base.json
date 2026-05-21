@@ -1,0 +1,347 @@
+{
+  "person": {
+    "name": "Shreeya Kumbhoje",
+    "email": "shriyakumbhoje73@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/shreeyakumbhoje/",
+    "github": "https://github.com/Shriyaak",
+    "summary": "AI & Data Scientist based in London, passionate about LLMs, RAG pipelines, and turning data into decisions. Experienced in building intelligent systems that actually matter.",
+    "visa": {
+      "type": "Graduate Visa",
+      "expires": "January 2027",
+      "note": "Requires UK visa sponsorship. Currently on a Graduate Visa expiring January 2027."
+    }
+  },
+  "work_experience": [
+    {
+      "role": "AI Engineer (Contract)",
+      "company": "Aspect Maintenance",
+      "location": "London, UK",
+      "period": "Oct 2025 – March 2026",
+      "stack": ["Python", "LLMs", "RAG", "Azure", "GCP", "REST API", "FastAPI", "Microsoft Authentication", "JWT Tokenisation"],
+      "achievements": [
+        "Reduced manual support queries by ~30% by building a GenAI-powered semantic search system over 100+ operational documents via a RAG pipeline (Groq LLM, FAISS, BGE-base-en-v1.5)",
+        "Increased operational efficiency by 35% by developing a GPT-4.1 powered KPI insight engine integrating live Salesforce and Webfleet data via an ETL pipeline.",
+        "Improved marketing targeting accuracy by 25% by independently delivering a customer segmentation dashboard (React, FastAPI, GCP) uncovering high-value segments from 13,000+ records.",
+        "Reduced onboarding time by 40% across 335+ users by delivering a centralized LMS (React, Django, Azure Entra ID) with JWT authentication and role-based access control."
+      ]
+    },
+    {
+      "role": "Cloud Solutions Engineer (Contract)",
+      "company": "Vital Edge Technologies",
+      "location": "Pune, India",
+      "period": "Feb 2023 – May 2023",
+      "stack": ["Microsoft Azure", "PowerBI", "Python", "SQL", "ERP systems"],
+      "achievements": [
+        "Prevented an estimated 30% loss in billable reporting hours by cleaning and validating Azure system logs with Python, eliminating data integrity gaps that masked recurring system failures.",
+        "Reduced mean time to detect incidents by ~35% across ERP and DMS clients by managing Power BI dashboards monitoring performance metrics, ensuring consistent cloud infrastructure observability.",
+        "Collaborated with cross-functional teams to deliver client solutions."
+      ]
+    },
+    {
+      "role": "Data Analyst",
+      "company": "Foliage Outdoors",
+      "location": "Pune, India",
+      "period": "Aug 2022 – Jan 2023",
+      "stack": ["Python", "PowerBI", "Excel"],
+      "achievements": [
+        "Recovered 25% of lost client contracts within one quarter by building financial projections that drove the decision to prioritise school partnerships, restoring pre-pandemic baseline revenue.",
+        "Improved profitability projection accuracy by 15% by conducting field research across multiple vendors, confirming industry-wide pricing increases and updating cost models accordingly."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "MSc Data Science",
+      "institution": "University of Nottingham",
+      "location": "Nottingham, UK",
+      "period": "2023 – 2024",
+      "highlights": [
+        "Focused on machine learning, NLP, and data engineering.",
+        "Dissertation on applied Computer Vision for Semi-Supervised learning based Multi-Object detection."
+      ]
+    },
+    {
+      "degree": "BEng Information Technology",
+      "institution": "MIT College of Engineering (Maharashtra)",
+      "location": "Pune, India",
+      "period": "2016 – 2022",
+      "highlights": [
+        "Graduated with distinction.",
+        "Final year project on Stock-Trading predictive analytics."
+      ]
+    }
+  ],
+  "career_gap": {
+    "period": "2023 – 2024",
+    "explanation": "During this period Shreeya was actively applying for roles in the UK market, which was highly competitive. She used this time productively by completing her MSc at the University of Nottingham, building a portfolio of data analysis and ML projects, and completing virtual internships with British Airways, Citi, and Deloitte to gain industry exposure across different sectors."
+  },
+  "projects": [
+    {
+      "name": "CORA — AI Portfolio Concierge Version 1",
+      "period": "2025",
+      "category": "ai_engineering",
+      "stack": ["Next.js", "Supabase", "Voyage AI", "Anthropic Haiku", "ElevenLabs", "pgvector", "RAG"],
+      "description": "An AI-powered portfolio assistant built on RAG. CORA answers recruiter questions about Shreeya using a curated knowledge base embedded with Voyage AI and retrieved via Supabase pgvector."
+    },
+    {
+      "name": "RAG Pipeline for Document Q&A",
+      "period": "2025",
+      "category": "ai_engineering",
+      "stack": ["Python", "LangChain", "OpenAI", "BGE-base-en-v1.5", "FAISS", "Groq LLM"],
+      "description": "Contributed to a RAG system for querying large document collections. Implemented chunking strategies, embedding pipelines, and retrieval-augmented generation with source attribution."
+    },
+    {
+      "name": "Data Pipeline Insights Engine",
+      "period": "2026",
+      "category": "ai_engineering",
+      "stack": ["LLM Integration", "RAG", "Prompt Engineering", "ETL pipeline", "Batch Processing", "React"],
+      "description": "Built a GPT-4.1 powered KPI insight engine integrating live Salesforce and Webfleet data, improving operational efficiency by 35%."
+    },
+    {
+      "name": "Customer Segmentation Analytics Platform",
+      "period": "2025",
+      "category": "data_engineering",
+      "stack": ["FastAPI", "GCP", "GCS", "RFM Analysis", "Business Intelligence", "React"],
+      "description": "Built a customer segmentation dashboard using RFM-D analysis on 13,000+ records, improving marketing targeting accuracy by 25%."
+    },
+    {
+      "name": "Enterprise Learning Management System",
+      "period": "2026",
+      "category": "fullstack",
+      "stack": ["Django", "REST API", "JWT Authentication", "Microsoft Authentication", "React"],
+      "description": "Built a centralized LMS with JWT authentication and role-based access control, reducing onboarding time by 40% across 335+ users."
+    },
+    {
+      "name": "Semi-Supervised Autonomous Driving Detection",
+      "period": "2024",
+      "category": "ml_engineering",
+      "stack": ["Computer Vision", "Deep Learning", "Attention Mechanisms", "YOLOv5", "PyTorch", "Semi-Supervised Learning"],
+      "description": "Built a semi-supervised autonomous driving object detection system using YOLOv5 to reduce manual labeling requirements."
+    },
+    {
+      "name": "NLP Lecture Transcript Summarization",
+      "period": "2024",
+      "category": "nlp",
+      "stack": ["NLP", "NLTK", "Python", "Text Summarization"],
+      "description": "Built a text-to-text NLP system to summarize lecture transcripts using traditional extractive methods for efficient information compression."
+    },
+    {
+      "name": "Gesture Recognition System",
+      "period": "2024",
+      "category": "ml_engineering",
+      "stack": ["Machine Learning", "Feature Engineering", "Scikit-Learn", "Python"],
+      "description": "Machine learning system for classifying hand gestures using smartphone accelerometer sensor data."
+    },
+    {
+      "name": "Bank Customer Segmentation Analysis",
+      "period": "2024",
+      "category": "data_analysis",
+      "stack": ["SQL", "Python", "Pandas", "Power BI", "Clustering", "EDA"],
+      "description": "Customer analytics project segmenting bank users based on demographics, financial behavior, and balance distribution to support targeted marketing strategies."
+    },
+    {
+      "name": "Bike Sales Dashboard",
+      "period": "2024",
+      "category": "data_analysis",
+      "stack": ["Power BI", "Excel", "SQL", "EDA"],
+      "description": "Interactive dashboard analyzing customer purchasing behavior based on income, commute distance, demographics, and regional trends."
+    },
+    {
+      "name": "Breast Cancer Detection",
+      "period": "2024",
+      "category": "ml_engineering",
+      "stack": ["Python", "Scikit-Learn", "Pandas", "NumPy", "Machine Learning"],
+      "description": "Machine learning classification model for early breast cancer detection using supervised learning techniques."
+    },
+    {
+      "name": "Earthquake Response Dashboard",
+      "period": "2024",
+      "category": "data_analysis",
+      "stack": ["R", "Streamlit", "Python", "Pandas", "Time Series Analysis"],
+      "description": "Data-driven dashboard analyzing earthquake patterns to support emergency response and decision-making."
+    },
+    {
+      "name": "Library Management System",
+      "period": "2024",
+      "category": "data_engineering",
+      "stack": ["SQL", "PostgreSQL", "Database Design", "Stored Procedures", "CRUD Operations"],
+      "description": "SQL-based library management system implementing database design, CRUD operations, and advanced queries for real-world library workflows."
+    },
+    {
+      "name": "Retail Sales Analysis",
+      "period": "2024",
+      "category": "data_analysis",
+      "stack": ["SQL", "Python", "Pandas", "EDA", "Power BI"],
+      "description": "End-to-end retail analytics project analyzing sales trends, customer behavior, and high-value transactions for business insights."
+    },
+    {
+      "name": "Studio Ghibli Movie Analysis",
+      "period": "2024",
+      "category": "data_analysis",
+      "stack": ["R", "Data Analysis", "Visualization", "EDA"],
+      "description": "Exploratory data analysis of Studio Ghibli movie dataset to uncover patterns in ratings, genres, and audience preferences."
+    },
+    {
+      "name": "Airline Sentiment & Booking Prediction System",
+      "period": "2024",
+      "category": "nlp",
+      "stack": ["Python", "NLP", "TextBlob", "WordCloud", "Scikit-Learn", "RandomForest", "GridSearchCV"],
+      "description": "NLP and machine learning project analyzing airline reviews and predicting booking completion using sentiment analysis and classification models. Part of the British Airways virtual internship."
+    },
+    {
+      "name": "M&A Investment Banking Simulation",
+      "period": "2024",
+      "category": "virtual_internship",
+      "stack": ["Excel", "Financial Modeling", "Valuation", "PowerPoint", "Market Research"],
+      "description": "Buyside M&A simulation analyzing a potential acquisition of Best Buy through financial modeling, valuation, and strategic analysis. Part of the Citi Forage virtual internship program."
+    },
+    {
+      "name": "Operational Analytics & Workforce Equity Dashboard",
+      "period": "2024",
+      "category": "virtual_internship",
+      "stack": ["Tableau", "Excel", "Data Visualization", "Classification", "Industrial IoT Analytics"],
+      "description": "Analytics project analyzing machine downtime and gender pay equality using industrial telemetry and workforce data. Part of the Deloitte virtual internship program."
+    }
+  ],
+  "skills": {
+    "core": ["Python", "SQL", "LLMs", "RAG", "Prompt Engineering", "FastAPI", "React", "Next.js"],
+    "ai_ml": ["FAISS", "BGE Embeddings", "Claude API", "OpenAI API", "Groq", "NLP", "Computer Vision", "YOLOv5", "Scikit-Learn", "PyTorch", "Random Forest", "Semi-Supervised Learning", "LangChain", "Embeddings", "pgvector"],
+    "data_engineering": ["ETL Pipelines", "Airflow", "PostgreSQL", "Supabase", "Pandas", "NumPy", "GCP", "Azure"],
+    "cloud": ["Azure", "GCP", "AWS S3", "AWS Lambda", "Supabase"],
+    "data_analysis": ["Power BI", "Tableau", "Excel", "EDA", "Clustering", "RFM Analysis", "Data Visualization"],
+    "familiar": ["R", "Financial Modelling", "Business Intelligence", "Streamlit"],
+    "languages": ["Python", "SQL", "JavaScript"]
+  },
+  "website": {
+    "pages": [
+      {
+        "name": "Main Page",
+        "url": "/",
+        "description": "The main portfolio page with CORA the AI concierge, Shreeya's experience panel on the right, and info panel on the left with skills and navigation."
+      },
+      {
+        "name": "Projects",
+        "url": "/projects",
+        "description": "Showcases all of Shreeya's projects with a featured carousel and full project grid including data analysis and virtual internship sections. Includes tech stack, descriptions and GitHub links for each project."
+      },
+      {
+        "name": "Extras",
+        "url": "/extras",
+        "description": "Shreeya's life beyond the resume — her art (pen and ink sketches), photography, and technical writing on Medium. A great place to get to know Shreeya as a person."
+      }
+    ],
+    "navigation_tips": [
+      "The experience panel on the right side of the main page is expandable — click any role to see detailed achievements and tech stack.",
+      "GitHub and LinkedIn buttons are at the bottom left of the main page.",
+      "The Extras page has Shreeya's art, photography, and Medium articles.",
+      "The Projects page has GitHub links for every project."
+    ]
+  },
+  "recruiter_faq": [
+    {
+      "q": "Is Shreeya available for work?",
+      "a": "Yes, Shreeya is actively looking for AI Engineer, ML Engineer, Data Scientist, or Data Engineer roles in the UK."
+    },
+    {
+      "q": "Does Shreeya require visa sponsorship?",
+      "a": "Yes, Shreeya requires UK visa sponsorship. She is currently on a Graduate Visa expiring January 2027."
+    },
+    {
+      "q": "Where is Shreeya based?",
+      "a": "Shreeya is based in London, UK."
+    },
+    {
+      "q": "What is Shreeya's strongest technical area?",
+      "a": "Shreeya's strongest area is LLMs and RAG pipelines, with hands-on production experience building and deploying them. She also has strong Python, data engineering, and full-stack AI product experience."
+    },
+    {
+      "q": "Can Shreeya work on-site?",
+      "a": "Shreeya is open to hybrid and on-site roles in London."
+    },
+    {
+      "q": "How can I contact Shreeya?",
+      "a": "You can reach Shreeya at shriyakumbhoje73@gmail.com or via LinkedIn at https://www.linkedin.com/in/shreeyakumbhoje/"
+    },
+    {
+      "q": "What kind of roles is Shreeya looking for?",
+      "a": "Shreeya is targeting AI Engineer, ML Engineer, Data Scientist, or Data Engineer roles — ideally working on LLM-based products, RAG systems, or data infrastructure. She is not looking for pure BI or analyst roles."
+    },
+    {
+      "q": "When is Shreeya's Birthday?",
+      "a": "Its on the 17th August 1998."
+    },
+    {
+      "q": "What was Shreeya doing in 2024 before her AI Engineer role?",
+      "a": "Shreeya completed her MSc Data Science at the University of Nottingham in 2024. She was actively applying for roles in a tough UK market, and during that time built multiple data analysis and ML projects and completed virtual internships with British Airways, Citi, and Deloitte to gain broad industry exposure."
+    },
+    {
+      "q": "Why is there a gap in Shreeya's CV?",
+      "a": "There is no real gap — Shreeya completed her MSc at Nottingham in 2023-2024, built a portfolio of data and ML projects, and completed virtual internships with British Airways (NLP/ML), Citi (M&A financial modeling), and Deloitte (operational analytics). She was actively upskilling and applying throughout this period in a highly competitive UK job market."
+    },
+    {
+      "q": "Does Shreeya know Power BI?",
+      "a": "Yes, Shreeya has used Power BI in professional roles and personal projects, though her primary focus is Python-based AI and ML engineering. Power BI is a supporting skill rather than her main strength."
+    },
+    {
+      "q": "Does Shreeya know R?",
+      "a": "Shreeya has used R in data analysis projects during her MSc, though her primary language is Python. R is a familiar tool rather than a core strength."
+    }, 
+    {
+    "q": "What virtual internships has Shreeya done?",
+    "a": "Shreeya completed three virtual internships in 2024: 1) British Airways (Forage) — NLP and ML project analyzing airline reviews and predicting booking completion using sentiment analysis and Random Forest classification. 2) Citi (Forage) — Buyside M&A investment banking simulation analyzing a potential acquisition of Best Buy through financial modeling and valuation. 3) Deloitte (Forage) — Operational analytics project analyzing machine downtime and gender pay equality using Tableau and industrial telemetry data."
+    },
+    {
+    "q": "Tell me about Shreeya's British Airways virtual internship",
+    "a": "As part of the British Airways Forage virtual internship, Shreeya built an NLP and ML system analyzing airline customer reviews. She performed sentiment analysis using TextBlob, built word clouds for insight visualization, and trained a Random Forest classifier with GridSearchCV to predict booking completion. Stack: Python, NLP, TextBlob, Scikit-Learn, RandomForest, GridSearchCV."
+    },
+    {
+    "q": "Tell me about Shreeya's Citi virtual internship",
+    "a": "As part of the Citi Forage virtual internship, Shreeya completed a buyside M&A simulation analyzing a potential acquisition of Best Buy. She built financial models, performed company valuation, and delivered a strategic investment analysis presentation. Stack: Excel, Financial Modeling, Valuation, PowerPoint, Market Research."
+    },
+    {
+     "q": "Tell me about Shreeya's Deloitte virtual internship",
+    "a": "As part of the Deloitte Forage virtual internship, Shreeya worked on an operational analytics project for Daikibo Industrials. She analyzed machine downtime patterns and built a workforce equity dashboard examining gender pay equality using industrial telemetry and workforce data. Stack: Tableau, Excel, Data Visualization, Classification, Industrial IoT Analytics."
+    },
+    {
+    "q": "What data analysis projects has Shreeya done?",
+    "a": "Shreeya has 6 data analysis projects: 1) Bank Customer Segmentation Analysis — segmenting bank users using Power BI and clustering. 2) Bike Sales Dashboard — customer purchasing behavior dashboard in Power BI and Excel. 3) Retail Sales Analysis — end-to-end sales analytics using SQL, Python, and Power BI. 4) Earthquake Response Dashboard — time series dashboard using R and Streamlit. 5) Studio Ghibli Movie Analysis — exploratory data analysis using R. 6) Library Management System — SQL-based database design and analytics."
+    },
+    {
+    "q": "How many AI engineering projects has Shreeya done?",
+    "a": "Shreeya has 3 core AI engineering projects: 1) CORA — AI Portfolio Concierge, a full RAG-powered portfolio assistant using Anthropic Haiku, Voyage AI, and Supabase pgvector. 2) RAG Pipeline for Document Q&A — chunking, embedding, and retrieval pipeline using FAISS, BGE embeddings, and Groq LLM. 3) Data Pipeline Insights Engine — GPT-4.1 powered KPI engine integrating live Salesforce and Webfleet data via ETL. All three are in production or deployed contexts."
+    },
+    {
+    "q": "How many projects has Shreeya used NLP in?",
+    "a": "Shreeya has used NLP in 2 projects: 1) NLP Lecture Transcript Summarization — extractive text summarization using NLTK and Python. 2) Airline Sentiment & Booking Prediction System — sentiment analysis using TextBlob and booking prediction using Random Forest (British Airways virtual internship). NLP is a working skill for Shreeya, with her primary strength in LLMs and RAG pipelines."
+    },
+    {
+    "q": "How many times has Shreeya implemented RAG?",
+    "a": "Shreeya has implemented RAG in 3 projects: 1) CORA — AI Portfolio Concierge, using Voyage AI embeddings and Supabase pgvector for retrieval. 2) RAG Pipeline for Document Q&A, using FAISS and BGE-base-en-v1.5 embeddings with Groq LLM. 3) GenAI Semantic Search System at Aspect Maintenance — RAG pipeline over 100+ operational documents reducing support queries by 30%. RAG is one of her strongest and most applied technical areas."
+    },
+    {
+    "q": "How many projects has Shreeya used machine learning algorithms in?",
+    "a": "Shreeya has used ML algorithms in 6 projects: 1) Gesture Recognition System — classification using Scikit-Learn on accelerometer data. 2) Breast Cancer Detection — supervised classification model. 3) Airline Sentiment & Booking Prediction — Random Forest with GridSearchCV. 4) Semi-Supervised Autonomous Driving Detection — YOLOv5 and deep learning with PyTorch. 5) Customer Segmentation Analytics Platform — RFM-D clustering on 13,000+ records. 6) Bank Customer Segmentation Analysis — clustering and EDA."},
+    {
+     "q": "How many total projects has Shreeya built?",
+    "a": "Shreeya has built 18 projects in total across categories: 3 AI engineering projects (RAG, LLMs), 3 ML engineering projects (Computer Vision, classification), 2 NLP projects, 2 data engineering projects, 6 data analysis projects, and 3 virtual internship projects (British Airways, Citi, Deloitte). Her GitHub is at https://github.com/Shriyaak"
+    }
+    
+  ],
+  "personal": {
+    "interests": [
+      {
+        "name": "Art",
+        "description": "Shreeya enjoys sketching and visual art in her spare time — particularly pen and ink architectural and city sketches."
+      },
+      {
+        "name": "Photography",
+        "description": "Shreeya is a keen photographer, particularly street and travel photography."
+      },
+      {
+        "name": "Writing",
+        "description": "Shreeya writes technical articles on Medium covering AI, RAG pipelines, and data engineering."
+      }
+    ],
+    "personality": "Shreeya is curious, driven, and detail-oriented. She thrives at the intersection of engineering and creativity, and brings both technical rigour and a human touch to everything she builds."
+  }
+}
