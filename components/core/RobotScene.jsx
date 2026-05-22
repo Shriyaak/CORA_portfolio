@@ -83,7 +83,7 @@ export default function RobotScene() {
           height: '100%',
           display: 'block',
           // Zoom out on mobile by scaling down and shifting up slightly
-          transform: isMobile ? 'scale(0.8) translateY(-10%)':'none', 'translateX(-10%)' : 'none',
+          transform: isMobile ? 'scale(0.9) translateY(-10%)':'none', 'translateX(-10%)' : 'none',
           transformOrigin: 'center top',
           transition: 'transform 0.3s ease',
         }}
