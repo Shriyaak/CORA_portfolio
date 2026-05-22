@@ -27,3 +27,10 @@ html, body {
 canvas + div {
   display: none !important;
 }
+spline-viewer::part(logo) {
+  display: none !important;
+}
+
+spline-viewer > div:last-child {
+  display: none !important;
+}

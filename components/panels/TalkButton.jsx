@@ -130,10 +130,9 @@ export default function TalkButton() {
   const recognitionRef = useRef(null);
   const audioRef       = useRef(null);
 
-  // Check sessionStorage on mount — skip pill for returning visitors
   useEffect(() => {
     if (window.__welcomePlayed) {
-    setActivated(true);
+      setActivated(true);
     }
   }, []);
 
@@ -207,8 +206,21 @@ export default function TalkButton() {
 
   const send = () => sendText(input);
 
-  const startListening = () => {
+  // ── MOBILE MIC FIX: request getUserMedia first, then start recognition ──
+  const startListening = async () => {
+    // On mobile browsers, we must request mic permission explicitly first
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Permission granted — stop the stream immediately (recognition handles its own)
+      stream.getTracks().forEach(t => t.stop());
+    } catch (err) {
+      alert('Microphone access was denied. Please allow microphone access in your browser settings and try again.');
+      return;
+    }
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return;
+
     const recognition = new SpeechRecognition();
     recognitionRef.current = recognition;
     recognition.lang = 'en-US';
@@ -222,8 +234,14 @@ export default function TalkButton() {
       setListening(false); setBarState('idle'); setInput(transcript);
       setTimeout(() => sendText(transcript), 100);
     };
-    recognition.onerror = () => { setListening(false); setBarState('idle'); };
-    recognition.onend = () => { setListening(false); if (barState === 'listening') setBarState('idle'); };
+    recognition.onerror = (e) => {
+      console.error('Speech recognition error:', e.error);
+      setListening(false); setBarState('idle');
+    };
+    recognition.onend = () => {
+      setListening(false);
+      if (barState === 'listening') setBarState('idle');
+    };
     recognition.start();
   };
 
@@ -308,7 +326,8 @@ export default function TalkButton() {
             >→</button>
 
             {micSupported && (
-              <button onClick={listening ? stopListening : startListening}
+              <button
+                onClick={listening ? stopListening : startListening}
                 title={listening ? 'Stop listening' : 'Speak your question'}
                 style={{
                   background: listening ? 'rgba(100,160,255,0.15)' : BG,
