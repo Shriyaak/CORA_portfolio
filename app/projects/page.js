@@ -178,8 +178,13 @@ export default function ProjectsPage() {
           .projects-page { padding: 20px !important; }
           .projects-header { flex-direction: column !important; align-items: center !important; gap: 12px !important; margin-bottom: 24px !important; }
           .projects-count { display: none !important; }
-          .carousel-inner { height: 280px !important; }
+          .featured-carousel { display: none !important; }
+          .featured-label { display: none !important; }
           .projects-grid { grid-template-columns: 1fr !important; }
+          .project-card { padding: 18px !important; gap: 10px !important; border-radius: 18px !important; }
+          .project-card-title { font-size: 12px !important; }
+          .project-card-desc { font-size: 13px !important; }
+          .project-card-tech { font-size: 12px !important; }
         }
       `}</style>
 
@@ -213,23 +218,86 @@ export default function ProjectsPage() {
       </div>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <SectionLabel text="Featured" />
-        <FeaturedCarousel />
+
+        <div className="featured-label">
+          <SectionLabel text="Featured" />
+        </div>
+        <div className="featured-carousel">
+          <FeaturedCarousel />
+        </div>
 
         <SectionLabel text="All Projects" />
         <div className="projects-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px', paddingBottom: '48px' }}>
-          {allProjects.map(project => <ProjectCard key={project.id} project={project} />)}
+          {allProjects.map(project => (
+            <div key={project.id} className="project-card" style={{
+              background: BOX, boxShadow: SHADOW,
+              borderRadius: '24px', padding: '26px',
+              display: 'flex', flexDirection: 'column', gap: '14px',
+              borderTop: '1.5px solid rgba(255,255,255,0.9)',
+              borderLeft: '1.5px solid rgba(255,255,255,0.8)',
+              borderRight: '1.5px solid rgba(140,140,140,0.2)',
+              borderBottom: '1.5px solid rgba(140,140,140,0.2)',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                <a href={project.github} target="_blank" rel="noopener noreferrer"
+                  style={{ width: '38px', height: '38px', background: BOX, boxShadow: SHADOW_SM, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}
+                ><GitHubIcon /></a>
+              </div>
+              <div className="project-card-title" style={{ fontFamily: 'Orbitron, monospace', fontSize: '14px', fontWeight: '700', color: TITLE, letterSpacing: '0.06em' }}>{project.title}</div>
+              <div className="project-card-desc" style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: '15px', color: TEXT, lineHeight: '1.7', flex: 1 }}>{project.description}</div>
+              <div className="project-card-tech" style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: '14px', color: TEXT, opacity: 0.7 }}>{project.tech.join(', ')}</div>
+            </div>
+          ))}
         </div>
 
         <SectionLabel text="Data Analysis" linkLabel="More on Git" linkHref="https://github.com/Shriyaak/Data-Analysis-Projects" />
         <div className="projects-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px', paddingBottom: '48px' }}>
-          {dataAnalysisProjects.map(project => <ProjectCard key={project.id} project={project} />)}
+          {dataAnalysisProjects.map(project => (
+            <div key={project.id} className="project-card" style={{
+              background: BOX, boxShadow: SHADOW,
+              borderRadius: '24px', padding: '26px',
+              display: 'flex', flexDirection: 'column', gap: '14px',
+              borderTop: '1.5px solid rgba(255,255,255,0.9)',
+              borderLeft: '1.5px solid rgba(255,255,255,0.8)',
+              borderRight: '1.5px solid rgba(140,140,140,0.2)',
+              borderBottom: '1.5px solid rgba(140,140,140,0.2)',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                <a href={project.github} target="_blank" rel="noopener noreferrer"
+                  style={{ width: '38px', height: '38px', background: BOX, boxShadow: SHADOW_SM, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}
+                ><GitHubIcon /></a>
+              </div>
+              <div className="project-card-title" style={{ fontFamily: 'Orbitron, monospace', fontSize: '14px', fontWeight: '700', color: TITLE, letterSpacing: '0.06em' }}>{project.title}</div>
+              <div className="project-card-desc" style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: '15px', color: TEXT, lineHeight: '1.7', flex: 1 }}>{project.description}</div>
+              <div className="project-card-tech" style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: '14px', color: TEXT, opacity: 0.7 }}>{project.tech.join(', ')}</div>
+            </div>
+          ))}
         </div>
 
         <SectionLabel text="Virtual Internships" />
         <div className="projects-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px', paddingBottom: '60px' }}>
-          {virtualInternships.map(project => <ProjectCard key={project.id} project={project} />)}
+          {virtualInternships.map(project => (
+            <div key={project.id} className="project-card" style={{
+              background: BOX, boxShadow: SHADOW,
+              borderRadius: '24px', padding: '26px',
+              display: 'flex', flexDirection: 'column', gap: '14px',
+              borderTop: '1.5px solid rgba(255,255,255,0.9)',
+              borderLeft: '1.5px solid rgba(255,255,255,0.8)',
+              borderRight: '1.5px solid rgba(140,140,140,0.2)',
+              borderBottom: '1.5px solid rgba(140,140,140,0.2)',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                <a href={project.github} target="_blank" rel="noopener noreferrer"
+                  style={{ width: '38px', height: '38px', background: BOX, boxShadow: SHADOW_SM, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}
+                ><GitHubIcon /></a>
+              </div>
+              <div className="project-card-title" style={{ fontFamily: 'Orbitron, monospace', fontSize: '14px', fontWeight: '700', color: TITLE, letterSpacing: '0.06em' }}>{project.title}</div>
+              <div className="project-card-desc" style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: '15px', color: TEXT, lineHeight: '1.7', flex: 1 }}>{project.description}</div>
+              <div className="project-card-tech" style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: '14px', color: TEXT, opacity: 0.7 }}>{project.tech.join(', ')}</div>
+            </div>
+          ))}
         </div>
+
       </div>
     </div>
   );
