@@ -124,6 +124,7 @@ export default function TalkButton() {
   const [barState, setBarState]     = useState('idle');
   const [listening, setListening]   = useState(false);
   const [micSupported, setMicSupported] = useState(false);
+  const [isMobile, setIsMobile]     = useState(false);
   const [pillHover, setPillHover]   = useState(false);
   const bottomRef      = useRef(null);
   const inputRef       = useRef(null);
@@ -135,6 +136,13 @@ export default function TalkButton() {
     if (window.__welcomePlayed) {
       setActivated(true);
     }
+  }, []);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   useEffect(() => {
@@ -232,7 +240,6 @@ export default function TalkButton() {
     recognition.maxAlternatives = 1;
     recognition.continuous = false;
 
-    // Auto-stop after 5 seconds
     autoStopRef.current = setTimeout(() => {
       recognition.stop();
       setListening(false);
@@ -352,7 +359,8 @@ export default function TalkButton() {
               onMouseLeave={e => { e.currentTarget.style.boxShadow = SHADOW_INSET; e.currentTarget.style.color = 'rgba(0,0,0,0.5)'; }}
             >→</button>
 
-            {micSupported && (
+            {/* Mic — desktop only */}
+            {micSupported && !isMobile && (
               <button
                 onClick={listening ? stopListening : startListening}
                 title={listening ? 'Tap to stop' : 'Speak your question'}
