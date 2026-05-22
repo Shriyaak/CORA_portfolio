@@ -129,6 +129,7 @@ export default function TalkButton() {
   const inputRef       = useRef(null);
   const recognitionRef = useRef(null);
   const audioRef       = useRef(null);
+  const autoStopRef    = useRef(null);
 
   useEffect(() => {
     if (window.__welcomePlayed) {
@@ -206,12 +207,15 @@ export default function TalkButton() {
 
   const send = () => sendText(input);
 
-  // ── MOBILE MIC FIX: request getUserMedia first, then start recognition ──
   const startListening = async () => {
-    // On mobile browsers, we must request mic permission explicitly first
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      // Permission granted — stop the stream immediately (recognition handles its own)
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        }
+      });
       stream.getTracks().forEach(t => t.stop());
     } catch (err) {
       alert('Microphone access was denied. Please allow microphone access in your browser settings and try again.');
@@ -228,26 +232,49 @@ export default function TalkButton() {
     recognition.maxAlternatives = 1;
     recognition.continuous = false;
 
-    recognition.onstart = () => { setListening(true); setBarState('listening'); setInput(''); };
+    // Auto-stop after 5 seconds
+    autoStopRef.current = setTimeout(() => {
+      recognition.stop();
+      setListening(false);
+      setBarState('idle');
+    }, 5000);
+
+    recognition.onstart = () => {
+      setListening(true);
+      setBarState('listening');
+      setInput('');
+    };
+
     recognition.onresult = (event) => {
+      clearTimeout(autoStopRef.current);
       const transcript = event.results[0][0].transcript;
-      setListening(false); setBarState('idle'); setInput(transcript);
+      setListening(false);
+      setBarState('idle');
+      setInput(transcript);
       setTimeout(() => sendText(transcript), 100);
     };
+
     recognition.onerror = (e) => {
+      clearTimeout(autoStopRef.current);
       console.error('Speech recognition error:', e.error);
-      setListening(false); setBarState('idle');
+      setListening(false);
+      setBarState('idle');
     };
+
     recognition.onend = () => {
+      clearTimeout(autoStopRef.current);
       setListening(false);
       if (barState === 'listening') setBarState('idle');
     };
+
     recognition.start();
   };
 
   const stopListening = () => {
+    clearTimeout(autoStopRef.current);
     if (recognitionRef.current) recognitionRef.current.stop();
-    setListening(false); setBarState('idle');
+    setListening(false);
+    setBarState('idle');
   };
 
   return (
@@ -307,7 +334,7 @@ export default function TalkButton() {
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && send()}
-              placeholder={listening ? 'Listening...' : 'Ask about Shreeya...'}
+              placeholder={listening ? 'Listening... tap mic to stop' : 'Ask about Shreeya...'}
               style={{
                 flex: 1, background: 'transparent', border: 'none', outline: 'none',
                 fontSize: '17px', fontFamily: 'Rajdhani, sans-serif', fontWeight: '700',
@@ -328,14 +355,16 @@ export default function TalkButton() {
             {micSupported && (
               <button
                 onClick={listening ? stopListening : startListening}
-                title={listening ? 'Stop listening' : 'Speak your question'}
+                title={listening ? 'Tap to stop' : 'Speak your question'}
                 style={{
                   background: listening ? 'rgba(100,160,255,0.15)' : BG,
                   boxShadow: listening ? SHADOW_INSET : SHADOW_OUT,
-                  border: 'none', borderRadius: '50%', width: '32px', height: '32px',
+                  border: 'none', borderRadius: '50%',
+                  width: listening ? '40px' : '32px',
+                  height: listening ? '40px' : '32px',
                   cursor: 'pointer', display: 'flex', alignItems: 'center',
                   justifyContent: 'center', flexShrink: 0, position: 'relative',
-                  transition: 'box-shadow 0.15s ease, background 0.2s ease',
+                  transition: 'box-shadow 0.15s ease, background 0.2s ease, width 0.2s ease, height 0.2s ease',
                 }}
               >
                 {listening && (
