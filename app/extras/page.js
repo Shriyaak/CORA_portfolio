@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
-const IS_OWNER = process.env.NEXT_PUBLIC_IS_OWNER === 'true';
 
 const BG = 'rgb(227, 227, 227)';
 const BOX = 'rgb(200, 200, 200)';
@@ -44,7 +43,6 @@ const articles = [
   },
 ];
 
-// ── LIGHTBOX ──────────────────────────────────────────────────
 function Lightbox({ src, onClose }) {
   useEffect(() => {
     const handleKey = (e) => { if (e.key === 'Escape') onClose(); };
@@ -53,59 +51,32 @@ function Lightbox({ src, onClose }) {
   }, [onClose]);
 
   return (
-    <div
-      onClick={onClose}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 1000,
-        background: 'rgba(0,0,0,0.85)',
-        backdropFilter: 'blur(12px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        animation: 'fadeIn 0.2s ease',
-        cursor: 'zoom-out',
-      }}
-    >
+    <div onClick={onClose} style={{
+      position: 'fixed', inset: 0, zIndex: 1000,
+      background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(12px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      animation: 'fadeIn 0.2s ease', cursor: 'zoom-out',
+    }}>
       <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to   { opacity: 1; }
-        }
-        @keyframes scaleIn {
-          from { transform: scale(0.92); opacity: 0; }
-          to   { transform: scale(1);    opacity: 1; }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
       `}</style>
-
-      {/* close button */}
-      <button
-        onClick={onClose}
-        style={{
-          position: 'absolute', top: '24px', right: '24px',
-          background: 'rgba(255,255,255,0.1)',
-          border: '1px solid rgba(255,255,255,0.2)',
-          borderRadius: '50%', width: '40px', height: '40px',
-          color: 'white', fontSize: '20px', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backdropFilter: 'blur(8px)',
-          transition: 'background 0.2s',
-        }}
+      <button onClick={onClose} style={{
+        position: 'absolute', top: '24px', right: '24px',
+        background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
+        borderRadius: '50%', width: '40px', height: '40px',
+        color: 'white', fontSize: '20px', cursor: 'pointer',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        backdropFilter: 'blur(8px)', transition: 'background 0.2s',
+      }}
         onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
         onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
       >×</button>
-
-      {/* image */}
-      <img
-        src={src}
-        onClick={e => e.stopPropagation()}
-        style={{
-          maxWidth: '90vw',
-          maxHeight: '90vh',
-          objectFit: 'contain',
-          borderRadius: '16px',
-          boxShadow: '0 24px 80px rgba(0,0,0,0.6)',
-          animation: 'scaleIn 0.25s cubic-bezier(0.22,1,0.36,1)',
-          cursor: 'default',
-        }}
-      />
+      <img src={src} onClick={e => e.stopPropagation()} style={{
+        maxWidth: '90vw', maxHeight: '90vh', objectFit: 'contain',
+        borderRadius: '16px', boxShadow: '0 24px 80px rgba(0,0,0,0.6)',
+        animation: 'scaleIn 0.25s cubic-bezier(0.22,1,0.36,1)', cursor: 'default',
+      }} />
     </div>
   );
 }
@@ -141,7 +112,7 @@ function Placeholder({ aspect }) {
       boxShadow: INSET, borderRadius: '16px',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
-      <div style={{ fontFamily: 'Orbitron, monospace', fontSize: '9px', color: 'rgba(0, 0, 0, 0.5)', letterSpacing: '0.2em' }}>
+      <div style={{ fontFamily: 'Orbitron, monospace', fontSize: '9px', color: 'rgba(0,0,0,0.5)', letterSpacing: '0.2em' }}>
         COMING SOON
       </div>
     </div>
@@ -150,15 +121,12 @@ function Placeholder({ aspect }) {
 
 function ImageGrid({ items, onImageClick }) {
   return (
-    <div style={{ columns: '3 280px', gap: '16px' }}>
+    <div className="image-grid" style={{ columns: '3 280px', gap: '16px' }}>
       {items.map(item => (
-        <div
-          key={item.id}
-          onClick={() => item.src && onImageClick(item.src)}
+        <div key={item.id} onClick={() => item.src && onImageClick(item.src)}
           style={{
             breakInside: 'avoid', marginBottom: '16px',
-            borderRadius: '16px', overflow: 'hidden',
-            boxShadow: SHADOW_SM,
+            borderRadius: '16px', overflow: 'hidden', boxShadow: SHADOW_SM,
             borderTop: '1.5px solid rgba(255,255,255,0.9)',
             borderLeft: '1.5px solid rgba(255,255,255,0.8)',
             cursor: item.src ? 'zoom-in' : 'default',
@@ -190,9 +158,7 @@ function SectionHeader({ title, link, linkLabel }) {
         / {title}
       </div>
       {link && (
-        <a href={link}
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
+        <a href={link} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
           style={{
             fontFamily: 'Rajdhani, sans-serif', fontSize: '14px', fontWeight: '600',
             color: hover ? TITLE : TEXT, textDecoration: 'none',
@@ -209,13 +175,11 @@ function ArticleCard({ article }) {
   const [hovered, setHovered] = useState(false);
   return (
     <a href={article.url} target="_blank" rel="noopener noreferrer"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       style={{
         textDecoration: 'none', display: 'flex', flexDirection: 'column',
         background: BOX, boxShadow: hovered ? INSET : SHADOW,
-        borderRadius: '20px', overflow: 'hidden',
-        transition: 'box-shadow 0.25s ease',
+        borderRadius: '20px', overflow: 'hidden', transition: 'box-shadow 0.25s ease',
         borderTop: '1.5px solid rgba(255,255,255,0.9)',
         borderLeft: '1.5px solid rgba(255,255,255,0.8)',
         borderRight: '1.5px solid rgba(140,140,140,0.2)',
@@ -240,7 +204,7 @@ function ArticleCard({ article }) {
                 <rect width="24" height="24" rx="4" fill="rgba(103,103,103,0.12)" />
                 <text x="12" y="17" textAnchor="middle" fontFamily="serif" fontSize="14" fontWeight="bold" fill="rgba(103,103,103,0.35)">M</text>
               </svg>
-              <div style={{ fontFamily: 'Orbitron, monospace', fontSize: '7px', color: 'rgba(0, 0, 0, 0.5)', letterSpacing: '0.25em', textTransform: 'uppercase' }}>
+              <div style={{ fontFamily: 'Orbitron, monospace', fontSize: '7px', color: 'rgba(0,0,0,0.5)', letterSpacing: '0.25em', textTransform: 'uppercase' }}>
                 thumbnail coming soon
               </div>
             </div>
@@ -282,16 +246,26 @@ export default function ExtrasPage() {
   const scrollToWriting = () => writingRef.current?.scrollIntoView({ behavior: 'smooth' });
 
   return (
-    <div style={{
+    <div className="extras-page" style={{
       width: '100vw', minHeight: '100vh', background: BG,
       padding: '40px', boxSizing: 'border-box',
       overflowY: 'auto', overflowX: 'hidden',
     }}>
-      <ScrollIndicator />
+      <style>{`
+        @media (max-width: 768px) {
+          .extras-page { padding: 20px !important; }
+          .extras-header { flex-direction: column !important; align-items: center !important; gap: 16px !important; margin-bottom: 32px !important; }
+          .extras-header-spacer { display: none !important; }
+          .image-grid { columns: 2 !important; }
+          .articles-grid { grid-template-columns: 1fr !important; }
+          .section-title { font-size: 16px !important; }
+        }
+      `}</style>
 
+      <ScrollIndicator />
       {lightboxSrc && <Lightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />}
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '56px' }}>
+      <div className="extras-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '56px' }}>
         <button
           onClick={() => router.push('/')}
           onMouseEnter={() => setBackHover(true)}
@@ -328,14 +302,13 @@ export default function ExtrasPage() {
           >find out more about me ↓</button>
         </div>
 
-        <div style={{ width: '120px' }} />
+        <div className="extras-header-spacer" style={{ width: '120px' }} />
       </div>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-
         <div ref={writingRef}>
           <SectionHeader title="writing" />
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px', marginBottom: '64px' }}>
+          <div className="articles-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px', marginBottom: '64px' }}>
             {articles.map(article => <ArticleCard key={article.id} article={article} />)}
           </div>
         </div>
@@ -349,7 +322,6 @@ export default function ExtrasPage() {
         <div style={{ marginBottom: '64px' }}>
           <ImageGrid items={photoPlaceholders} onImageClick={setLightboxSrc} />
         </div>
-
       </div>
     </div>
   );

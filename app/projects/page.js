@@ -63,7 +63,7 @@ function FeaturedCarousel() {
       borderRight: '1.5px solid rgba(140,140,140,0.2)',
       borderBottom: '1.5px solid rgba(140,140,140,0.2)',
     }}>
-      <div style={{
+      <div className="carousel-inner" style={{
         width: '100%', height: '550px',
         background: `linear-gradient(135deg, ${project.color[0]}, ${project.color[1]})`,
         boxShadow: INSET, position: 'relative',
@@ -120,8 +120,7 @@ function ProjectCard({ project }) {
   const [githubHover, setGithubHover] = useState(false);
 
   return (
-    <div
-      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+    <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       style={{
         background: BOX, boxShadow: hovered ? SHADOW_SM : SHADOW,
         borderRadius: '24px', padding: '26px',
@@ -149,34 +148,15 @@ function ProjectCard({ project }) {
   );
 }
 
-// Reusable section header with optional link — matches extras page style
 function SectionLabel({ text, linkLabel, linkHref }) {
   const [hover, setHover] = useState(false);
   return (
-    <div style={{
-      display: 'flex', alignItems: 'center',
-      justifyContent: 'space-between',
-      marginBottom: '16px',
-    }}>
-      <div style={{
-        fontFamily: 'Orbitron, monospace', fontSize: '11px',
-        letterSpacing: '0.3em', color: TEXT,
-        textTransform: 'uppercase', opacity: 0.7,
-      }}>{text}</div>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+      <div style={{ fontFamily: 'Orbitron, monospace', fontSize: '11px', letterSpacing: '0.3em', color: TEXT, textTransform: 'uppercase', opacity: 0.7 }}>{text}</div>
       {linkHref && (
-        <a
-          href={linkHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-          style={{
-            fontFamily: 'Rajdhani, sans-serif', fontSize: '14px',
-            fontWeight: '600', color: hover ? TITLE : TEXT,
-            textDecoration: 'none', letterSpacing: '0.05em',
-            transition: 'color 0.2s ease',
-            display: 'flex', alignItems: 'center', gap: '6px',
-          }}
+        <a href={linkHref} target="_blank" rel="noopener noreferrer"
+          onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+          style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: '14px', fontWeight: '600', color: hover ? TITLE : TEXT, textDecoration: 'none', letterSpacing: '0.05em', transition: 'color 0.2s ease', display: 'flex', alignItems: 'center', gap: '6px' }}
         >{linkLabel} →</a>
       )}
     </div>
@@ -188,12 +168,22 @@ export default function ProjectsPage() {
   const [backHover, setBackHover] = useState(false);
 
   return (
-    <div style={{
+    <div className="projects-page" style={{
       width: '100vw', minHeight: '100vh', background: BG,
       padding: '40px', boxSizing: 'border-box',
       overflowY: 'auto', overflowX: 'hidden',
     }}>
-      <div style={{
+      <style>{`
+        @media (max-width: 768px) {
+          .projects-page { padding: 20px !important; }
+          .projects-header { flex-direction: column !important; align-items: center !important; gap: 12px !important; margin-bottom: 24px !important; }
+          .projects-count { display: none !important; }
+          .carousel-inner { height: 280px !important; }
+          .projects-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+
+      <div className="projects-header" style={{
         display: 'flex', alignItems: 'center',
         justifyContent: 'space-between', marginBottom: '40px',
       }}>
@@ -217,31 +207,29 @@ export default function ProjectsPage() {
           <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: '14px', color: TEXT, letterSpacing: '0.15em', marginTop: '4px' }}>Things I have built</div>
         </div>
 
-        <div style={{ fontFamily: 'Orbitron, monospace', fontSize: '11px', color: TEXT, letterSpacing: '0.15em', opacity: 0.6 }}>
+        <div className="projects-count" style={{ fontFamily: 'Orbitron, monospace', fontSize: '11px', color: TEXT, letterSpacing: '0.15em', opacity: 0.6 }}>
           {totalProjects} projects
         </div>
       </div>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-
         <SectionLabel text="Featured" />
         <FeaturedCarousel />
 
         <SectionLabel text="All Projects" />
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px', paddingBottom: '48px' }}>
+        <div className="projects-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px', paddingBottom: '48px' }}>
           {allProjects.map(project => <ProjectCard key={project.id} project={project} />)}
         </div>
 
         <SectionLabel text="Data Analysis" linkLabel="More on Git" linkHref="https://github.com/Shriyaak/Data-Analysis-Projects" />
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px', paddingBottom: '48px' }}>
+        <div className="projects-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px', paddingBottom: '48px' }}>
           {dataAnalysisProjects.map(project => <ProjectCard key={project.id} project={project} />)}
         </div>
 
         <SectionLabel text="Virtual Internships" />
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px', paddingBottom: '60px' }}>
+        <div className="projects-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px', paddingBottom: '60px' }}>
           {virtualInternships.map(project => <ProjectCard key={project.id} project={project} />)}
         </div>
-
       </div>
     </div>
   );

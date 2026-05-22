@@ -3,8 +3,6 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
-const IS_OWNER = process.env.NEXT_PUBLIC_IS_OWNER === 'true';
-
 const BG = 'rgb(227, 227, 227)';
 const BOX = 'rgb(200, 200, 200)';
 const TITLE = 'rgb(30, 30, 30)';
@@ -46,7 +44,6 @@ function Lightbox({ src, items, onClose, onPrev, onNext }) {
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes scaleIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
       `}</style>
-
       <button onClick={onClose} style={{
         position: 'absolute', top: '24px', right: '24px',
         background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
@@ -58,7 +55,6 @@ function Lightbox({ src, items, onClose, onPrev, onNext }) {
         onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
         onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
       >×</button>
-
       <button onClick={e => { e.stopPropagation(); onPrev(); }} style={{
         position: 'absolute', left: '24px', top: '50%', transform: 'translateY(-50%)',
         background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
@@ -70,7 +66,6 @@ function Lightbox({ src, items, onClose, onPrev, onNext }) {
         onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
         onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
       >←</button>
-
       <button onClick={e => { e.stopPropagation(); onNext(); }} style={{
         position: 'absolute', right: '24px', top: '50%', transform: 'translateY(-50%)',
         background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
@@ -82,13 +77,10 @@ function Lightbox({ src, items, onClose, onPrev, onNext }) {
         onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
         onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
       >→</button>
-
       <img src={src} onClick={e => e.stopPropagation()} style={{
-        maxWidth: '88vw', maxHeight: '88vh',
-        objectFit: 'contain', borderRadius: '16px',
-        boxShadow: '0 24px 80px rgba(0,0,0,0.6)',
-        animation: 'scaleIn 0.25s cubic-bezier(0.22,1,0.36,1)',
-        cursor: 'default',
+        maxWidth: '88vw', maxHeight: '88vh', objectFit: 'contain',
+        borderRadius: '16px', boxShadow: '0 24px 80px rgba(0,0,0,0.6)',
+        animation: 'scaleIn 0.25s cubic-bezier(0.22,1,0.36,1)', cursor: 'default',
       }} />
     </div>
   );
@@ -97,47 +89,35 @@ function Lightbox({ src, items, onClose, onPrev, onNext }) {
 export default function ArtPage() {
   const router = useRouter();
   const [backHover, setBackHover] = useState(false);
-  const [items, setItems] = useState(initialArt);
+  const [items] = useState(initialArt);
   const [lightboxIndex, setLightboxIndex] = useState(null);
-  const [dragOver, setDragOver] = useState(false);
 
   const openLightbox = (index) => setLightboxIndex(index);
   const closeLightbox = () => setLightboxIndex(null);
   const prevImage = () => setLightboxIndex(i => (i - 1 + items.length) % items.length);
   const nextImage = () => setLightboxIndex(i => (i + 1) % items.length);
 
-  const handleFiles = (files) => {
-    Array.from(files).forEach(file => {
-      if (!file.type.startsWith('image/')) return;
-      const url = URL.createObjectURL(file);
-      setItems(prev => [...prev, { id: Date.now() + Math.random(), src: url, aspect: '4/3', local: true }]);
-    });
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setDragOver(false);
-    handleFiles(e.dataTransfer.files);
-  };
-
   return (
-    <div style={{
+    <div className="art-page" style={{
       width: '100vw', minHeight: '100vh', background: BG,
       padding: '40px', boxSizing: 'border-box',
       overflowY: 'auto', overflowX: 'hidden',
     }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .art-page { padding: 20px !important; }
+          .art-header { flex-direction: column !important; align-items: center !important; gap: 12px !important; margin-bottom: 24px !important; }
+          .art-header-spacer { display: none !important; }
+          .art-grid { columns: 2 !important; }
+        }
+      `}</style>
 
       {lightboxIndex !== null && (
-        <Lightbox
-          src={items[lightboxIndex].src}
-          items={items}
-          onClose={closeLightbox}
-          onPrev={prevImage}
-          onNext={nextImage}
-        />
+        <Lightbox src={items[lightboxIndex].src} items={items}
+          onClose={closeLightbox} onPrev={prevImage} onNext={nextImage} />
       )}
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '48px' }}>
+      <div className="art-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '48px' }}>
         <button
           onClick={() => router.push('/extras')}
           onMouseEnter={() => setBackHover(true)}
@@ -154,98 +134,32 @@ export default function ArtPage() {
         >← Back</button>
 
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontFamily: 'Orbitron, monospace', fontSize: '22px', fontWeight: '900', color: TITLE, letterSpacing: '0.3em' }}>
-            / ART
-          </div>
-          <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: '12px', color: TEXT, letterSpacing: '0.15em', marginTop: '4px' }}>
-            Pen & ink · Architecture · Cities
-          </div>
+          <div style={{ fontFamily: 'Orbitron, monospace', fontSize: '22px', fontWeight: '900', color: TITLE, letterSpacing: '0.3em' }}>/ ART</div>
+          <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: '12px', color: TEXT, letterSpacing: '0.15em', marginTop: '4px' }}>Pen & ink · Architecture · Cities</div>
         </div>
 
-        <div style={{ width: '100px' }} />
+        <div className="art-header-spacer" style={{ width: '100px' }} />
       </div>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ columns: '3 280px', gap: '16px', marginBottom: '48px' }}>
+        <div className="art-grid" style={{ columns: '3 280px', gap: '16px', marginBottom: '60px' }}>
           {items.map((item, index) => (
-            <div
-              key={item.id}
-              onClick={() => openLightbox(index)}
+            <div key={item.id} onClick={() => openLightbox(index)}
               style={{
                 breakInside: 'avoid', marginBottom: '16px',
-                borderRadius: '16px', overflow: 'hidden',
-                boxShadow: SHADOW_SM,
+                borderRadius: '16px', overflow: 'hidden', boxShadow: SHADOW_SM,
                 borderTop: '1.5px solid rgba(255,255,255,0.9)',
                 borderLeft: '1.5px solid rgba(255,255,255,0.8)',
-                cursor: 'zoom-in',
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                cursor: 'zoom-in', transition: 'transform 0.2s ease, box-shadow 0.2s ease',
                 position: 'relative',
               }}
               onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.boxShadow = SHADOW; }}
               onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = SHADOW_SM; }}
             >
               <img src={item.src} alt="" style={{ width: '100%', display: 'block', objectFit: 'cover' }} />
-              {item.local && (
-                <div style={{
-                  position: 'absolute', top: '8px', right: '8px',
-                  background: 'rgba(103,103,103,0.7)', borderRadius: '6px',
-                  padding: '3px 8px', fontFamily: 'Orbitron, monospace',
-                  fontSize: '7px', color: 'white', letterSpacing: '0.1em',
-                }}>LOCAL</div>
-              )}
             </div>
           ))}
         </div>
-
-        {/* ← WRAPPED IN IS_OWNER */}
-        {IS_OWNER && (
-          <div style={{ borderTop: '1px solid rgba(103,103,103,0.15)', paddingTop: '40px', marginBottom: '60px' }}>
-            <div style={{
-              fontFamily: 'Orbitron, monospace', fontSize: '11px',
-              color: TEXT, letterSpacing: '0.2em',
-              textTransform: 'uppercase', marginBottom: '16px', opacity: 0.6,
-            }}>
-              + Add more
-            </div>
-
-            <div
-              onDrop={handleDrop}
-              onDragOver={e => { e.preventDefault(); setDragOver(true); }}
-              onDragLeave={() => setDragOver(false)}
-              onClick={() => document.getElementById('art-file-input').click()}
-              style={{
-                background: dragOver ? 'rgba(103,103,103,0.08)' : BOX,
-                boxShadow: dragOver ? INSET : SHADOW_SM,
-                border: dragOver ? '2px dashed rgba(103,103,103,0.4)' : '2px dashed rgba(103,103,103,0.2)',
-                borderRadius: '20px', padding: '48px 24px',
-                textAlign: 'center', transition: 'all 0.2s ease', cursor: 'pointer',
-              }}
-            >
-              <div style={{ fontSize: '32px', marginBottom: '12px', opacity: 0.4 }}>🖼</div>
-              <div style={{
-                fontFamily: 'Orbitron, monospace', fontSize: '10px',
-                color: TEXT, letterSpacing: '0.2em',
-                textTransform: 'uppercase', marginBottom: '8px',
-              }}>
-                Drop images here or click to browse
-              </div>
-              <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: '12px', color: TEXT, opacity: 0.5 }}>
-                PNG, JPG, WEBP — previews locally until you upload to Supabase
-              </div>
-              <input id="art-file-input" type="file" accept="image/*" multiple style={{ display: 'none' }}
-                onChange={e => handleFiles(e.target.files)} />
-            </div>
-
-            <div style={{
-              marginTop: '16px', fontFamily: 'Rajdhani, sans-serif', fontSize: '12px',
-              color: TEXT, opacity: 0.45, textAlign: 'center', lineHeight: '1.6',
-            }}>
-              To persist images: upload to Supabase bucket <code style={{ fontFamily: 'monospace', background: 'rgba(0,0,0,0.06)', padding: '1px 6px', borderRadius: '4px' }}>cora-images</code> and add the URL to <code style={{ fontFamily: 'monospace', background: 'rgba(0,0,0,0.06)', padding: '1px 6px', borderRadius: '4px' }}>initialArt</code> in this file.
-            </div>
-          </div>
-        )}
-        {/* ← END IS_OWNER */}
-
       </div>
     </div>
   );
