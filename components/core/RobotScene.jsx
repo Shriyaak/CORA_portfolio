@@ -4,7 +4,15 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function RobotScene() {
   const [frozen, setFrozen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const viewerRef = useRef(null);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -65,14 +73,23 @@ export default function RobotScene() {
       position: 'absolute',
       top: 0,
       left: 0,
+      overflow: 'hidden',
     }}>
       <spline-viewer
         ref={viewerRef}
         url="https://prod.spline.design/RoAkoZKC6TDrRDPP/scene.splinecode"
-        style={{ width: '100%', height: '100%', display: 'block' }}
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'block',
+          // Zoom out on mobile by scaling down and shifting up slightly
+          transform: isMobile ? 'scale(0.7) translateY(-10%)' : 'none',
+          transformOrigin: 'center top',
+          transition: 'transform 0.3s ease',
+        }}
       />
 
-      {/* Cover Spline watermark — matches page background exactly */}
+      {/* Cover Spline watermark */}
       <div style={{
         position: 'absolute',
         bottom: 0,

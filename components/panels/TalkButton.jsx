@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 
 const BG = '#e0e0e0';
 const SHADOW_OUT = '6px 6px 14px #bebebe, -6px -6px 14px #ffffff';
@@ -116,6 +117,7 @@ const INITIAL_MESSAGES = [
 ];
 
 export default function TalkButton() {
+  const router = useRouter();
   const [open, setOpen]             = useState(false);
   const [activated, setActivated]   = useState(false);
   const [messages, setMessages]     = useState(INITIAL_MESSAGES);
@@ -218,11 +220,7 @@ export default function TalkButton() {
   const startListening = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-        }
+        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
       });
       stream.getTracks().forEach(t => t.stop());
     } catch (err) {
@@ -246,42 +244,30 @@ export default function TalkButton() {
       setBarState('idle');
     }, 5000);
 
-    recognition.onstart = () => {
-      setListening(true);
-      setBarState('listening');
-      setInput('');
-    };
-
+    recognition.onstart = () => { setListening(true); setBarState('listening'); setInput(''); };
     recognition.onresult = (event) => {
       clearTimeout(autoStopRef.current);
       const transcript = event.results[0][0].transcript;
-      setListening(false);
-      setBarState('idle');
-      setInput(transcript);
+      setListening(false); setBarState('idle'); setInput(transcript);
       setTimeout(() => sendText(transcript), 100);
     };
-
     recognition.onerror = (e) => {
       clearTimeout(autoStopRef.current);
       console.error('Speech recognition error:', e.error);
-      setListening(false);
-      setBarState('idle');
+      setListening(false); setBarState('idle');
     };
-
     recognition.onend = () => {
       clearTimeout(autoStopRef.current);
       setListening(false);
       if (barState === 'listening') setBarState('idle');
     };
-
     recognition.start();
   };
 
   const stopListening = () => {
     clearTimeout(autoStopRef.current);
     if (recognitionRef.current) recognitionRef.current.stop();
-    setListening(false);
-    setBarState('idle');
+    setListening(false); setBarState('idle');
   };
 
   return (
@@ -291,6 +277,41 @@ export default function TalkButton() {
         transform: 'translateX(-50%)', zIndex: 20,
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
       }}>
+
+        {/* ── MOBILE NAV PILLS — above search bar, mobile only ── */}
+        {isMobile && (
+          <div style={{
+            display: 'flex', gap: '10px', marginBottom: '8px',
+          }}>
+            {[
+              { label: 'Projects', href: '/projects' },
+              { label: "Extra's", href: '/extras' },
+            ].map(item => (
+              <div
+                key={item.label}
+                onClick={() => router.push(item.href)}
+                style={{
+                  padding: '8px 18px',
+                  borderRadius: '999px',
+                  background: 'rgba(255,255,255,0.35)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(0,0,0,0.08)',
+                  boxShadow: '0 6px 14px rgba(0,0,0,0.08)',
+                  fontFamily: 'Rajdhani, sans-serif',
+                  fontSize: '13px',
+                  fontWeight: '700',
+                  color: 'rgba(0,0,0,0.8)',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  userSelect: 'none',
+                }}
+              >
+                {item.label}
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* ── PILL ── */}
         {!activated && (
@@ -359,7 +380,6 @@ export default function TalkButton() {
               onMouseLeave={e => { e.currentTarget.style.boxShadow = SHADOW_INSET; e.currentTarget.style.color = 'rgba(0,0,0,0.5)'; }}
             >→</button>
 
-            {/* Mic — desktop only */}
             {micSupported && !isMobile && (
               <button
                 onClick={listening ? stopListening : startListening}
