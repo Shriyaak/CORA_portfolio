@@ -32,9 +32,9 @@ export default function Home() {
           position: 'absolute',
           bottom: 0,
           right: 0,
-          width: '240px',
+          width: '400px',
           height: '100px',
-          background: '#e0e0e0',
+          background: '#e3e3e3',
           zIndex: 20,
         }} />
 
